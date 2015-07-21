@@ -12,11 +12,11 @@ Place this script in your users home folder and make it executable:
 
 ```wget https://bitbucket.org/schnueggel/dockerinstall/raw/5d74d4dfd7b13c6f2c82b867650838005e6ba37b/dockerinstall.sh```
 
-```chmod u+x dockerinstall.sh```
+```chmod u+x ./dockerinstall.sh```
 
 Then call:
 
-```install.sh mygit.repourlurl```
+```sudo ./dockerinstall.sh mygit.repourlurl```
 
 This will create a new folder under the reponame (Git clone). If the repo already exists it will make a git pull.
 
