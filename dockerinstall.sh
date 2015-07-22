@@ -21,7 +21,7 @@ REPO=$(basename $GITURL .git)
 if [ ! -d $REPO ];
 then
     echo "Repo does not exist we clone it here under the name $REPO"
-    git clone --branch "$GITBRANCH" "$GITURL"
+    git clone "$GITURL"  --branch "$GITBRANCH"
 else
     echo "Repo exists we pull $REPO"
     cd ./$REPO
