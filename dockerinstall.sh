@@ -17,6 +17,7 @@ else
 fi
 
 REPO=$(basename $GITURL .git)
+echo "Found reponame $REPO";
 
 if [ ! -d $REPO ];
 then
