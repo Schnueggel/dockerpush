@@ -25,6 +25,7 @@ then
 else
     echo "Repo exists we pull $REPO"
     cd ./$REPO
+    git checkout $GITBRANCH
     git pull
 fi
 
