@@ -2,6 +2,7 @@
 set -e
 
 GITURL=$1
+echo "[INFO] Search for repository $GITURL"
 
 git ls-remote "$GITURL"  &>-
 if [ "$?" -ne 0 ]; then
