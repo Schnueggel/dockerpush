@@ -4,7 +4,7 @@ set -e
 GITURL=$1
 echo "[INFO] Search for repository $GITURL"
 
-git ls-remote "$GITURL"  &>-
+git ls-remote "$GITURL"
 if [ "$?" -ne 0 ]; then
     echo "[ERROR] Unable to read from '$GITURL'"
     exit 1;
