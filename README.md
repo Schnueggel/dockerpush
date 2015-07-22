@@ -16,7 +16,7 @@ Place this script in your users home folder and make it executable:
 
 Then call:
 
-```sudo ./dockerinstall.sh mygit.repourlurl```
+```sudo ./dockerinstall.sh git.repourlurl mybranch```
 
 This will create a new folder under the reponame (Git clone). If the repo already exists it will make a git pull.
 

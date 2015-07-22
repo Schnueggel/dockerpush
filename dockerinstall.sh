@@ -9,12 +9,19 @@ if [ "$?" -ne 0 ]; then
     exit 1;
 fi
 
+if [ $# -eq 2 ];
+then
+    GITBRANCH=$2
+else
+    GITBRANCH=master
+fi
+
 REPO=$(basename $GITURL .git)
 
 if [ ! -d $REPO ];
 then
     echo "Repo does not exist we clone it here under the name $REPO"
-    git clone "$GITURL"
+    git clone --branch "$GITBRANCH" "$GITURL"
 else
     echo "Repo exists we pull $REPO"
     cd ./$REPO
