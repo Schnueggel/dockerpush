@@ -50,7 +50,7 @@ fi
 # Create bare repo without work tree. We expect user git to exist and this script to be allowed su him
 #############################################################################################################
 su git
-
+mkdir -p "$DOCKERPUSH_WORKDIR"
 mkdir "$REPONAME" && cd "$REPONAME";
 
 git init --bare
