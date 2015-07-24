@@ -71,7 +71,7 @@ cat <<EOF > post-receive
 while read oldrev newrev ref
 do
     echo "Post Receive Hook..."
-    if [[ '$ref' =~ .*/$BRANCH$ ]];
+    if [[ \$ref =~ .*/$BRANCH$ ]];
     then
         echo "$BRANCH ref received.  Deploying $BRANCH branch to production..."
         git --work-tree="$DOCKERPUSH_WORKDIR" --git-dir="$GITDIR" checkout -f
@@ -83,7 +83,7 @@ do
              echo "Could not find docker-compose.yml"
         fi
     else
-        echo "Ref '$ref' successfully received.  Doing nothing: only the $BRANCH branch may be deployed on this Repo."
+        echo "Ref \$ref successfully received.  Doing nothing: only the $BRANCH branch may be deployed on this Repo."
         exit 1
     fi
 done
