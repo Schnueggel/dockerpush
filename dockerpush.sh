@@ -64,10 +64,11 @@ cd hooks;
 # Create hook script
 #############################################################################################################
 cat <<EOF > post-receive
-"#!/bin/sh"
+#!/bin/sh
 
 while read oldrev newrev ref
 do
+    echo "Post Receive Hook..."
     if [[ '$ref' =~ .*/$BRANCH$ ]];
     then
         echo "$BRANCH ref received.  Deploying $BRANCH branch to production..."
