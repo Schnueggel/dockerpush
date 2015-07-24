@@ -15,10 +15,11 @@ Usage:
 dockerpush.sh reponame [branch=master]
 ';
 
+REPONAME=$1
 #############################################################################################################
 # Display help if help flag is set or number of arguments is wrong
 #############################################################################################################
-if [ "$1" -eq "--help" ] || [ "$#" -lt "1" ] || [ "$#" -gt "2" ]; then
+if [ "$REPONAME" -eq "--help" ] || [ "$#" -lt "1" ] || [ "$#" -gt "2" ]; then
     echo "$HELP"
     exit 0
 fi
@@ -26,6 +27,7 @@ fi
 #############################################################################################################
 # Make the user of this script owns the repo dir
 #############################################################################################################
+mkdir -p "$DOCKERPUSH_WORKDIR"
 sudo chown -R `whoami`:`id -gn` "$DOCKERPUSH_WORKDIR"
 
 #############################################################################################################
@@ -52,7 +54,7 @@ fi
 # Create bare repo without work tree. We expect user git to exist and this script to be allowed su him
 #############################################################################################################
 su git
-mkdir -p "$DOCKERPUSH_WORKDIR"
+
 mkdir "$REPONAME" && cd "$REPONAME";
 
 git init --bare
