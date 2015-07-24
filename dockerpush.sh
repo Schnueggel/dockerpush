@@ -3,7 +3,9 @@ set -e
 
 : ${DOCKERPUSH_WORKDIR:=/var/www/repos}
 
-
+#############################################################################################################
+# HELP TEXT
+#############################################################################################################
 HELP='
 This script must be allowed to create files in this dir and in the dockerpush worktree dir.
 Also it must be allowed to call git init and docker-compose up -d and docker-compose build
