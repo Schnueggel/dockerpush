@@ -19,7 +19,7 @@ REPONAME=$1
 #############################################################################################################
 # Display help if help flag is set or number of arguments is wrong
 #############################################################################################################
-if [ "$REPONAME" == "--help" ] || [ "$#" -lt "1" ] || [ "$#" -gt "2" ]; then
+if [[ $REPONAME == "--help" ]] || [ "$#" -lt "1" ] || [ "$#" -gt "2" ]; then
     echo "$HELP"
     exit 0
 fi
@@ -40,7 +40,7 @@ else
     BRANCH=master
 fi
 
-CURRENTDIR=pwd
+CURRENTDIR="$PWD"
 REPONAME="$1.git";
 WORKTREE="$DOCKERPUSH_WORKDIR/$1"
 GITDIR="$CURRENTDIR/$REPONAME"
@@ -65,7 +65,7 @@ cd hooks;
 # Create hook script
 #############################################################################################################
 cat <<EOF > post-receive
-'#!/bin/sh'
+"#!/bin/sh"
 
 while read oldrev newrev ref
 do
