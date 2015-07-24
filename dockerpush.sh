@@ -51,9 +51,8 @@ if [ -d "$REPONAME" ]; then
 fi
 
 #############################################################################################################
-# Create bare repo without work tree. We expect user git to exist and this script to be allowed su him
+# Create bare repo without work tree.
 #############################################################################################################
-su git
 
 mkdir "$REPONAME" && cd "$REPONAME";
 
