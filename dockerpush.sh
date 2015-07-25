@@ -99,8 +99,8 @@ do
                 ln -sf "$ENVFILE" "$WORKTREE/$(basename $ENVFILE)"
             fi
             cd $WORKTREE
-            sudo -E docker-compose build
-            sudo -E docker-compose up -d
+            sudo docker-compose build
+            sudo docker-compose up -d
         else
              echo "Could not find docker-compose.yml"
         fi
