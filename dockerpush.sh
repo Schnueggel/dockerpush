@@ -57,7 +57,6 @@ sudo chown -R `whoami`:`id -gn` "$WORKTREE"
 #############################################################################################################
 
 mkdir "$REPONAME" && cd "$REPONAME";
-sudo chown -R `whoami`:`id -gn` "./$REPONAME"
 
 git init --bare
 cd hooks;
