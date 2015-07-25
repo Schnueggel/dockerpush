@@ -70,7 +70,7 @@ cat <<EOF > post-receive
 
 while read oldrev newrev ref
 do
-    whoami
+    echo `whoami`
     echo "Post Receive Hook ..."
     if [[ \$ref =~ .*/$BRANCH$ ]];
     then
