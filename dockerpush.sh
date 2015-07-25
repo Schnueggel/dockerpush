@@ -77,6 +77,7 @@ do
         git --work-tree="$WORKTREE" --git-dir="$GITDIR" checkout -f
         if [ -f "$WORKTREE/docker-compose.yml" ];
         then
+            cd $WORKTREE
             docker-compose build
             docker-compose up -d
         else
