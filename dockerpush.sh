@@ -3,8 +3,8 @@ set -e
 
 : ${DOCKERPUSH_WORKDIR:=/var/www/repos}
 
-if [[ $EUID -nq 0 ]]; then
-   echo "This script must as root."
+if ! [ $(id -u) = 0 ]; then
+   echo "This script must be called as root or with sudo"
    exit 1
 fi
 
