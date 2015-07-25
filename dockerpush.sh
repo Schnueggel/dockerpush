@@ -45,9 +45,9 @@ then
     #############################################################################################################
     # Create env file and make it readable only to root. docker-compose can read it
     #############################################################################################################
-    ENVFILE=$3
-    touch "$ENVFILE"
-    chmod o-r "$ENVFILE"
+    touch $3
+    chmod o-r $3
+    ENVFILE= readlink -f $3
 else
     ENVFILE=""
 fi
