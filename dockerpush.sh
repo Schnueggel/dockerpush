@@ -41,13 +41,16 @@ REPONAME="$1.git";
 WORKTREE="$DOCKERPUSH_WORKDIR/$1"
 GITDIR="$CURRENTDIR/$REPONAME"
 
+if [ -d "$REPONAME" ]; then
+    rm -rf $REPONAME;
+fi
+
+if [ -d "$WORKTREE" ]; then
+    rm -rf $WORKTREE;
+fi
+
 mkdir -p $WORKTREE
 sudo chown -R `whoami`:`id -gn` "$DOCKERPUSH_WORKDIR"
-
-if [ -d "$REPONAME" ]; then
-    echo "Repository $REPONAME already exist";
-    exit 0;
-fi
 
 #############################################################################################################
 # Create bare repo without work tree.
