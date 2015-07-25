@@ -78,8 +78,8 @@ do
         if [ -f "$WORKTREE/docker-compose.yml" ];
         then
             cd $WORKTREE
-            docker-compose build
-            docker-compose up -d
+            sudo docker-compose build
+            sudo docker-compose up -d
         else
              echo "Could not find docker-compose.yml"
         fi
