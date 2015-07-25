@@ -35,6 +35,7 @@ fi
 
 if ! id -u "$2" >/dev/null 2>&1; then
     echo "the given user does not exist"
+    exit 1
 fi
 #############################################################################################################
 # Set branch if given else set to master
