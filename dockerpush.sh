@@ -3,8 +3,8 @@ set -e
 
 : ${DOCKERPUSH_WORKDIR:=/var/www/repos}
 
-if [[ $EUID -eq 0 ]]; then
-   echo "This script must not be run as root. Pick another user who is in sudo group"
+if [[ $EUID -nq 0 ]]; then
+   echo "This script must as root."
    exit 1
 fi
 
@@ -18,47 +18,54 @@ Also it must be allowed to call git init and docker-compose up -d and docker-com
 Set environment DOCKERPUSH_WORKDIR to a path where the work dirs should be placed else it defaults to /var/www/repos
 
 [ENVFILE] Set the path to an file. this file will be copied to the workdir root.
+
 Usage:
 
-dockerpush.sh reponame [ENVFILE]
+dockerpush.sh reponame gituser [ENVFILE]
 ';
 
 REPONAME=$1
 #############################################################################################################
 # Display help if help flag is set or number of arguments is wrong
 #############################################################################################################
-if [[ $REPONAME == "--help" ]] || [ "$#" -lt "1" ] || [ "$#" -gt "2" ]; then
+if [[ $REPONAME == "--help" ]] || [ "$#" -lt "2" ] || [ "$#" -gt "3" ]; then
     echo "$HELP"
     exit 0
 fi
 
+if ! id -u "$2" >/dev/null 2>&1; then
+    echo "the given user does not exist"
+fi
 #############################################################################################################
 # Set branch if given else set to master
 #############################################################################################################
-if [ $# -eq 2 ];
+if [ $# -eq 3 ];
 then
-    ENVFILE=$2
-    sudo touch "$ENVFILE"
-    sudo chmod o-r "$ENVFILE"
+    #############################################################################################################
+    # Create env file and make it readable only to root. docker-compose can read it
+    #############################################################################################################
+    ENVFILE=$3
+    touch "$ENVFILE"
+    chmod o-r "$ENVFILE"
 else
     ENVFILE=""
 fi
-
+USER=$2
 CURRENTDIR="$PWD"
 REPONAME="$1.git";
 WORKTREE="$DOCKERPUSH_WORKDIR/$1"
 GITDIR="$CURRENTDIR/$REPONAME"
 
 if [ -d "$REPONAME" ]; then
-    sudo rm -rf $REPONAME;
+    rm -rf $REPONAME;
 fi
 
 if [ -d "$WORKTREE" ]; then
-    sudo rm -rf $WORKTREE;
+    rm -rf $WORKTREE;
 fi
 
 mkdir -p $WORKTREE
-sudo chown -R `whoami`:`id -gn` "$WORKTREE"
+chown -R "$USER":"$USER" "$WORKTREE"
 
 #############################################################################################################
 # Create bare repo without work tree.
@@ -68,7 +75,7 @@ mkdir "$REPONAME"
 
 cd "$REPONAME";
 
-sudo git init --bare
+git init --bare
 
 cd hooks;
 
@@ -103,9 +110,9 @@ do
 done
 EOF
 
-sudo chmod +x post-receive
+chmod +x post-receive
 
 cd ..
 cd ..
 
-sudo chown -R `whoami`:`id -gn` "$REPONAME"
+chown -R "$USER":"$USER" "$REPONAME"
