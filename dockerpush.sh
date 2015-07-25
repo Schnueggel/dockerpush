@@ -65,11 +65,11 @@ sudo chown -R `whoami`:`id -gn` "$WORKTREE"
 #############################################################################################################
 
 mkdir "$REPONAME"
-sudo chown -R `whoami`:`id -gn` "$REPONAME"
 
 cd "$REPONAME";
 
-git init --bare
+sudo git init --bare
+
 cd hooks;
 
 #############################################################################################################
@@ -104,3 +104,8 @@ done
 EOF
 
 chmod +x post-receive
+
+cd ..
+cd ..
+
+sudo chown -R `whoami`:`id -gn` "$REPONAME"
