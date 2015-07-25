@@ -3,6 +3,11 @@ set -e
 
 : ${DOCKERPUSH_WORKDIR:=/var/www/repos}
 
+if [[ $EUID -eq 0 ]]; then
+   echo "This script must not be run as root. Pick another user who is in sudo group"
+   exit 1
+fi
+
 #############################################################################################################
 # HELP TEXT
 #############################################################################################################
@@ -33,7 +38,8 @@ fi
 if [ $# -eq 2 ];
 then
     ENVFILE=$2
-    touch ENVFILE
+    sudo touch "$ENVFILE"
+    chmod o-r "$ENVFILE"
 else
     ENVFILE=""
 fi
@@ -44,11 +50,11 @@ WORKTREE="$DOCKERPUSH_WORKDIR/$1"
 GITDIR="$CURRENTDIR/$REPONAME"
 
 if [ -d "$REPONAME" ]; then
-    rm -rf $REPONAME;
+    sudo rm -rf $REPONAME;
 fi
 
 if [ -d "$WORKTREE" ]; then
-    rm -rf $WORKTREE;
+    sudo rm -rf $WORKTREE;
 fi
 
 mkdir -p $WORKTREE
@@ -58,7 +64,10 @@ sudo chown -R `whoami`:`id -gn` "$WORKTREE"
 # Create bare repo without work tree.
 #############################################################################################################
 
-mkdir "$REPONAME" && cd "$REPONAME";
+mkdir "$REPONAME"
+sudo chown -R `whoami`:`id -gn` "$REPONAME"
+
+cd "$REPONAME";
 
 git init --bare
 cd hooks;
