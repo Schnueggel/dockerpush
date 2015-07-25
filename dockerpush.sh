@@ -74,7 +74,7 @@ do
     if [[ \$ref =~ .*/$BRANCH$ ]];
     then
         echo "$BRANCH ref received.  Deploying $BRANCH branch to production..."
-        git --work-tree="$DOCKERPUSH_WORKDIR" --git-dir="$GITDIR" checkout -f
+        git --work-tree="$WORKTREE" --git-dir="$GITDIR" checkout -f
         if [ -f "$WORKTREE/docker-compose.yml" ];
         then
             docker-compose build
