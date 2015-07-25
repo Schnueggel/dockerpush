@@ -27,12 +27,6 @@ if [[ $REPONAME == "--help" ]] || [ "$#" -lt "1" ] || [ "$#" -gt "2" ]; then
 fi
 
 #############################################################################################################
-# Make the user of this script owns the repo dir
-#############################################################################################################
-mkdir -p "$DOCKERPUSH_WORKDIR"
-sudo chown -R `whoami`:`id -gn` "$DOCKERPUSH_WORKDIR"
-
-#############################################################################################################
 # Set branch if given else set to master
 #############################################################################################################
 if [ $# -eq 2 ];
@@ -46,6 +40,9 @@ CURRENTDIR="$PWD"
 REPONAME="$1.git";
 WORKTREE="$DOCKERPUSH_WORKDIR/$1"
 GITDIR="$CURRENTDIR/$REPONAME"
+
+mkdir -p $WORKTREE
+sudo chown -R `whoami`:`id -gn` "$DOCKERPUSH_WORKDIR"
 
 if [ -d "$REPONAME" ]; then
     echo "Repository $REPONAME already exist";
