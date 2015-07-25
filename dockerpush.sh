@@ -59,7 +59,6 @@ sudo chown -R `whoami`:`id -gn` "$DOCKERPUSH_WORKDIR"
 mkdir "$REPONAME" && cd "$REPONAME";
 
 git init --bare
-git branch master
 cd hooks;
 
 #############################################################################################################
