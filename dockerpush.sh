@@ -50,13 +50,14 @@ if [ -d "$WORKTREE" ]; then
 fi
 
 mkdir -p $WORKTREE
-sudo chown -R `whoami`:`id -gn` "$DOCKERPUSH_WORKDIR"
+sudo chown -R `whoami`:`id -gn` "$WORKTREE"
 
 #############################################################################################################
 # Create bare repo without work tree.
 #############################################################################################################
 
 mkdir "$REPONAME" && cd "$REPONAME";
+sudo chown -R `whoami`:`id -gn` "$REPONAME"
 
 git init --bare
 cd hooks;
