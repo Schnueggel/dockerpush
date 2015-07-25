@@ -39,7 +39,7 @@ if [ $# -eq 2 ];
 then
     ENVFILE=$2
     sudo touch "$ENVFILE"
-    chmod o-r "$ENVFILE"
+    sudo chmod o-r "$ENVFILE"
 else
     ENVFILE=""
 fi
@@ -103,7 +103,7 @@ do
 done
 EOF
 
-chmod +x post-receive
+sudo chmod +x post-receive
 
 cd ..
 cd ..
