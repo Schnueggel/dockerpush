@@ -96,7 +96,7 @@ do
         if [ -f "$WORKTREE/docker-compose.yml" ];
         then
             if [ -f "$ENVFILE" ];then
-                cp -f "$ENVFILE" "$WORKTREE/"
+                ln -sf "$ENVFILE" "$WORKTREE/$(basename $ENVFILE)"
             fi
             cd $WORKTREE
             sudo -E docker-compose build
