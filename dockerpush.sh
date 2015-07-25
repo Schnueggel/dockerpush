@@ -34,7 +34,7 @@ if [[ $REPONAME == "--help" ]] || [ "$#" -lt "2" ] || [ "$#" -gt "3" ]; then
 fi
 
 if ! id -u "$2" >/dev/null 2>&1; then
-    echo "the given user does not exist"
+    echo "The given user $2 does not exist"
     exit 1
 fi
 #############################################################################################################
@@ -96,7 +96,7 @@ do
         if [ -f "$WORKTREE/docker-compose.yml" ];
         then
             if [ -f "$ENVFILE" ];then
-                cp "$ENVFILE" "$WORKTREE/"
+                cp -f "$ENVFILE" "$WORKTREE/"
             fi
             cd $WORKTREE
             sudo -E docker-compose build
