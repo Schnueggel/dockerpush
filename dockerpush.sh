@@ -70,7 +70,8 @@ cat <<EOF > post-receive
 
 while read oldrev newrev ref
 do
-    echo "Post Receive Hook..."
+    whoami
+    echo "Post Receive Hook ..."
     if [[ \$ref =~ .*/$BRANCH$ ]];
     then
         echo "$BRANCH ref received.  Deploying $BRANCH branch to production..."
