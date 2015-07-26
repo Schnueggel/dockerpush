@@ -101,13 +101,14 @@ do
             cd $WORKTREE
             sudo docker-compose build
             sudo docker-compose up -d
+            exit 0
         else
              echo "Could not find docker-compose.yml"
         fi
     else
         echo "Ref \$ref successfully received.  Doing nothing: only the master branch may be deployed on this Repo."
-        exit 1
     fi
+    exit 1
 done
 EOF
 
