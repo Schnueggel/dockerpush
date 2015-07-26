@@ -6,10 +6,12 @@ Is a simple script to manage docker installs from git
 
 The public ssh key of the gituser must be placed in the authorized keys.
 
-docker and docker-compose must be installed.
+Docker and docker-compose must be installed.
+
+See also [Git Hook](#githook)
 
 ## Usage
-Place this script in your users home folder and make it executable:
+Place this script in your git users home folder and make it executable:
 
 ```wget -N https://bitbucket.org/schnueggel/dockerpush/raw/master/dockerpush.sh```
 
@@ -17,7 +19,7 @@ Place this script in your users home folder and make it executable:
 
 Then call:
 
-```sudo ./dockerpush.sh reponame gituser composerenvfile.env```
+```sudo ./dockerpush.sh yourreponame gituser composerenvfile.env```
 
 This script must be called with sudo or as root.
 
@@ -42,13 +44,15 @@ sudo ./dockerpush.sh myapp git myapp.env
 
 Will generate a folder:
 
-~/myapp.git <br>
---- hooks <br>
+~/myapp.git 
+
+--- hooks
+
 ------ post-receive
         
 And the worktree dir:
 
-/var/www/repos/myapp
+```/var/www/repos/myapp```
 
 
 ### EnvFile
@@ -63,7 +67,7 @@ env_file: ./composerenvfile.env
 The EnvFile will be set to readable for the root user. The gituser will not be able to read it. docker-compose will be running as root and can read it.
 This is enough.
 
-### Git hook
+### <a name="githook"></a> Git hook
 The generated git hook calls ```docker-compose build``` and ```docker-compose up -d``` on the worktree if it contains a docker-compose.yml
 
 To make this work type ```visudo``` and add the following line for example:
@@ -75,7 +79,7 @@ To make this work type ```visudo``` and add the following line for example:
 To push to this repository you need a ssh access for the git user to this server
 You should use forceful push.
 
-Add the repository destination to your remote
+Add a new remote repository destination to your local repository with:
 
 ```
 git remote add deploy repouser@myrepos.com
