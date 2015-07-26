@@ -1,10 +1,10 @@
 # Dockerpush
 
-Is a simple script to manage docker installs from git
+Is a simple script to manage docker installs with git
 
 ## Prequesite
 
-The public ssh key of the gituser must be placed in the authorized keys.
+The public ssh key of your gituser must be placed in the authorized keys file.
 
 Docker and docker-compose must be installed.
 
@@ -70,6 +70,7 @@ This is enough.
 ### <a name="githook"></a> Git hook
 The generated git hook calls ```docker-compose build``` and ```docker-compose up -d``` on the worktree if it contains a docker-compose.yml
 
+#### Prequesite
 To make this work type ```visudo``` and add the following line for example:
 
 ```gituser ALL=(root) NOPASSWD: /usr/local/bin/docker-compose```
@@ -100,3 +101,8 @@ git push deploy HEAD:master
 If you want to push from your local repo to the dockerpush repo make a new branch and call it deploy.
 Build your application and add the build result with ```git add .``` to your repository then use git push like described above. 
 Be aware of your gitingore file. gitignore files are global and not per branch. Best use a CI Tool.
+
+
+### TODO
+
+Adding flag
