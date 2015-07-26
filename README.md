@@ -23,7 +23,7 @@ Then call:
 
 This script must be called with sudo or as root.
 
-This will create a new folder reponame in the current folder and extend the folder with .git. 
+This will create a new bare repository with the name "reponame" in the current folder and extend the folder with .git. 
 If the repo exist it will be destroyed and recreated. Example:
 
 ```
@@ -39,17 +39,20 @@ chmod u+x ./dockerpush.sh
 ```
 
 ```
-sudo ./dockerpush.sh myapp git myapp.env
+sudo ./dockerpush.sh myapp gituser myapp.env
 ```
 
 Will generate a folder:
 
-~
--- myapp.git 
+home
 
----- hooks
+-- gituser
 
------- post-receive
+---- myapp.git 
+
+------ hooks
+
+-------- post-receive
         
 And the worktree dir:
 
