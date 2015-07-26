@@ -44,16 +44,30 @@ sudo ./dockerpush.sh myapp git myapp.env
 
 Will generate a folder:
 
-~/myapp.git 
+~
+-- myapp.git 
 
---- hooks
+---- hooks
 
 ------ post-receive
         
 And the worktree dir:
 
-```/var/www/repos/myapp```
+```
+/var/www/repos/myapp
+```
 
+Later when you push into the repository the myapp.env will be symlinked into the worktree dir:
+ 
+-- var
+
+---- www
+
+------ repos
+
+-------- myapp
+
+---------- myapp.env
 
 ### EnvFile
 
@@ -105,4 +119,4 @@ Be aware of your gitingore file. gitignore files are global and not per branch. 
 
 ### TODO
 
-Adding flag
+Lock if docker-compose is already running on multiple pushs?
