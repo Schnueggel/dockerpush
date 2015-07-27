@@ -48,6 +48,7 @@ then
     touch $3
     chmod o-r $3
     ENVFILE=$(readlink -f $3)
+    ENVBASE=$(basename $ENVFILE)
 else
     ENVFILE=""
 fi
@@ -96,7 +97,7 @@ do
         if [ -f "$WORKTREE/docker-compose.yml" ];
         then
             if [ -f "$ENVFILE" ];then
-                ln -sf "$ENVFILE" "$WORKTREE/$(basename $ENVFILE)"
+                ln -sf "$ENVFILE" "$WORKTREE/$ENVBASE"
             fi
             cd $WORKTREE
             sudo docker-compose build
