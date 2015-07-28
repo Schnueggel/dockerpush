@@ -214,7 +214,7 @@ function createDefaultStrategy {
         #############################################################################################################
         if [ -f \$LOGENVFILE ]; then
             ENVFILE=\$(read -r FIRSTLINE < \$LOGENVFILE)
-            WROKTREE_ENV=\$WORKTREE/\$(basename \$ENVFILE)
+            WORKTREE_ENV=\$WORKTREE/\$(basename \$ENVFILE)
         else
             ENVIFLE=
         fi
