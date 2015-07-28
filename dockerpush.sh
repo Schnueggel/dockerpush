@@ -223,6 +223,7 @@ function createDefaultStrategy {
         # Checkout git repo
         #############################################################################################################
         git --work-tree=\$WORKTREE --git-dir=\$GITDIR checkout -f
+        chmod -R  640 \$WORKTREE
 
         #############################################################################################################
         # Execute docker-compose
