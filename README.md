@@ -37,7 +37,7 @@ wget -N https://bitbucket.org/schnueggel/dockerpush/raw/master/dockerpush.sh
 ```
 
 ```
-chmod u+x ./dockerpush.sh
+sudo chmod 740 ./dockerpush.sh
 ```
 
 ```
