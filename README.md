@@ -110,7 +110,7 @@ You should use forceful push.
 Add a new remote repository destination to your local repository with:
 
 ```
-git remote add deploy repouser@myrepos.com
+git remote add deploy gituser@mydomain.com:myrepo.git
 ```
 
 Create a commit ( Add a file version txt file or something):
