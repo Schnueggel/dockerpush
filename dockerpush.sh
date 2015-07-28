@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 set -e
+SCRIPT_PATH=$(readlink -e -- "${BASH_SOURCE[0]}" && echo x) && SCRIPT_PATH=${SCRIPT_PATH%?x}
+SCRIPT_DIR=$(dirname -- "$SCRIPT_PATH" && echo x) && SCRIPT_DIR=${SCRIPT_DIR%?x}
 
 : ${DOCKERPUSH_WORKDIR:=/var/www/repos}
 
 #############################################################################################################
 # Getopts
 #############################################################################################################
-while getopts ":e:s:" o; do
+while getopts "e:s:" o; do
     case "${o}" in
         e)
             e=${OPTARG}
@@ -14,69 +16,72 @@ while getopts ":e:s:" o; do
         s)
             s=${OPTARG}
             ;;
+		*)
+			echo ${OPTARG}
+			;;
     esac
 done
+shift $((OPTIND-1))
+
 
 #############################################################################################################
-# Script must be executed as superuser
+# Start the Main part of this script
 #############################################################################################################
-if ! [ $(id -u) = 0 ]; then
-   echo "This script must be called as root or with sudo"
-   exit 1
-fi
+function main () {
+	#############################################################################################################
+	# Script must be executed as superuser
+	#############################################################################################################
+	if ! [ $(id -u) = 0 ]; then
+	   echo "This script must be called as root or with sudo"
+	   exit 1
+	fi
 
-#############################################################################################################
-# Setup vars
-#############################################################################################################
-NAME="$1"
-USER="$2"
-CURRENTDIR="$PWD"
-REPONAME="$NAME.git"
-WORKTREE="$DOCKERPUSH_WORKDIR"/$NAME
-GITDIR="$CURRENTDIR/$REPONAME"
-DOCKERPUSH_DIR=".dockerpush"
-DOCKERPUSH_REPO=$DOCKERPUSH_DIR/$NAME
-HOOKFILE=$REPONAME/hooks/post-receive
-LOGENVFILE=$DOCKERPUSH_REPO/envfile
+	#############################################################################################################
+	# Setup vars
+	#############################################################################################################
+	NAME="$1"
+	USER="$2"
+	REPONAME="$NAME.git"
+	WORKTREE="$DOCKERPUSH_WORKDIR"/$NAME
+	GITDIR="$SCRIPT_DIR/$REPONAME"
+	DOCKERPUSH_DIR="$SCRIPT_DIR/.dockerpush"
+	DOCKERPUSH_REPO=$DOCKERPUSH_DIR/$NAME
+	HOOKFILE=$REPONAME/hooks/post-receive
+	LOGENVFILE=$DOCKERPUSH_REPO/envfile
 
-#############################################################################################################
-# Display help if help flag is set or number of arguments is wrong
-#############################################################################################################
-if [[ $NAME == "--help" ]] || [ "$#" -lt "2" ] || [ "$#" -gt "3" ]; then
-    showHelp
-    exit 0
-fi
+	#############################################################################################################
+	# Display help if help flag is set or number of arguments is wrong
+	#############################################################################################################
+	if [[ $NAME == "--help" ]] || [ ! -n "$1"  ] || [ ! -n "$2"  ]; then
+		showHelp
+		exit 0
+	fi
 
-#############################################################################################################
-# Check if the given user does exist
-#############################################################################################################
-if ! id -u "$2" >/dev/null 2>&1; then
-    echo "The given user $2 does not exist"
-    exit 1
-fi
+	#############################################################################################################
+	# Check if the given user does exist
+	#############################################################################################################
+	if ! id -u "$2" >/dev/null 2>&1; then
+		echo "The given user $2 does not exist"
+		exit 1
+	fi
 
-#############################################################################################################
-# Create all this stuff. Be careful with the order of execution
-#############################################################################################################
-createEnvFile
-createDockerpushDir
-createWorkTreeDir
-createRepo
-createHook
-createDefaultStrategy
-
-#############################################################################################################
-# Set branch if given else set to master
-#############################################################################################################
-
+	#############################################################################################################
+	# Create all this stuff. Be careful with the order of execution
+	#############################################################################################################
+	createDockerpushDir
+	createEnvFile
+	createWorkTreeDir
+	createRepo
+	createHook
+	createDefaultStrategy
+}
 
 function createEnvFile {
-    if [ $e ];
+    if [ -n "$e" ];
     then
         #############################################################################################################
         # Create env file and make it readable only to root. docker-compose can read it
         #############################################################################################################
-        touch "$e"
         # Get full path
         ENVFILE=$(readlink -f $e)
         echo $ENVFILE > $LOGENVFILE
@@ -99,8 +104,8 @@ function createHook {
             echo "Post Receive Hook ..."
             if [[ \$ref =~ .*/master$ ]];
             then
-                echo "master ref received.  Deploying master branch to production..."
-                sudo ./dockerpush-strategy.sh "$NAME"
+                echo "master ref received.  Deploying master branch"
+                sudo $DOCKERPUSH_REPO/dockerpush-strategy.sh "$NAME"
                 exit 0
             else
                 echo "Ref \$ref successfully received.  Doing nothing: only the master branch may be deployed on this Repo."
@@ -125,7 +130,7 @@ function showHelp {
 
     [ENVFILE] Set the path to an file. This file will be symlinked to the workdir root.
 
-    Usage: dockerpush.sh reponame gituser [-e envfile] [-s strategyfile]
+    Usage: ./dockerpush.sh [-e envfile] [-s strategyfile] reponame gituser
     '
 }
 
@@ -177,6 +182,8 @@ function createDefaultStrategy {
     fi
     cat <<-EOF > "$DOCKERPUSH_DIR/dockerpush-strategy.sh"
         #!/bin/bash
+		SCRIPT_PATH=\$(readlink -e -- "\${BASH_SOURCE[0]}" && echo x) && SCRIPT_PATH=\${SCRIPT_PATH%?x}
+		SCRIPT_DIR=\$(dirname -- "\$SCRIPT_PATH" && echo x) && SCRIPT_DIR=\${SCRIPT_DIR%?x}
         #############################################################################################################
         # This script must be called with sudo
         # usage: ./dockerpush-strategy.sh reponame
@@ -200,24 +207,24 @@ function createDefaultStrategy {
         NAME="\$1"
         REPONAME=\$NAME.git
         WORKTREE="\$DOCKERPUSH_WORKDIR/\$NAME"
-        GITDIR=$CURRENTDIR/\$REPONAME
+        GITDIR=$SCRIPT_DIR/\$REPONAME
         DOCKERPUSH_REPO=$DOCKERPUSH_DIR/\$NAME
-        LOGENVFILE=\$DOCKERPUSH_REPO/envfile
-
+        LOGENVFILE=\$SCRIPT_DIR/\$NAME/envfile
+echo \$WORKTREE \$GITDIR
         #############################################################################################################
         # Check for a valid repo created with the dockerpush script
         #############################################################################################################
-        if [ -d \$DOCKERPUSH_REPO ]; then
+        if [ ! -d \$DOCKERPUSH_REPO ]; then
             echo "[ERROR] You are not allowed use this strategy on the repository \$NAME"
             exit 1
         fi
 
         #############################################################################################################
-        # Check if a lock file was written
+        # Check envfile exists and generate its path in the worktree
         #############################################################################################################
         if [ -f \$LOGENVFILE ]; then
-            ENVFILE=\$(read -r FIRSTLINE < \$LOGENVFILE)
-            WORKTREE_ENV=\$WORKTREE/\$(basename \$ENVFILE)
+            ENVFILE=\$(head -1 \$LOGENVFILE)
+            WORKTREE_ENV=\$WORKTREE/\${ENVFILE##*/}
         else
             ENVIFLE=
         fi
@@ -225,6 +232,7 @@ function createDefaultStrategy {
         #############################################################################################################
         # Checkout git repo
         #############################################################################################################
+
         git --work-tree=\$WORKTREE --git-dir=\$GITDIR checkout -f
         chmod -R  640 \$WORKTREE
 
@@ -248,5 +256,7 @@ function createDefaultStrategy {
              exit 1
         fi
 EOF
-    chmod 640 dockerpush-strategy.sh
+    chmod 740 "$DOCKERPUSH_DIR"/dockerpush-strategy.sh
 }
+
+main $1 $2

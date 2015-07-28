@@ -21,7 +21,7 @@ Place this script in your git users home folder and make it executable:
 
 Then call:
 
-```sudo ./dockerpush.sh myreponame gituser -e composerenvfile.env```
+```sudo ./dockerpush.sh -e composerenvfile.env myreponame gituser```
 
 This script must be called with sudo or as root.
 
@@ -41,7 +41,7 @@ sudo chmod 740 ./dockerpush.sh
 ```
 
 ```
-sudo ./dockerpush.sh myapp gituser -e myapp.env
+sudo ./dockerpush.sh -e myapp.env myapp gituser 
 ```
 
 Will generate a folder:
