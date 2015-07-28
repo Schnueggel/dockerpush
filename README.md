@@ -80,7 +80,7 @@ The worktree and the data inside cannot be modified or read by the git user
 ### dockerpush-strategy.sh
 
 This file will be generated on the first run of dockerpush.sh inside the .dockerpush directory which will also generated.
-Those files cannot be read or modified by the gituser
+Those files cannot be read or modified by the gituser.
 
 ### EnvFile
 
@@ -122,7 +122,7 @@ git commit -m "New Version"
 
 Next deploy  what ever local branch you are to the master branch of your repo
 ```
-git push deploy HEAD:master
+git push -f deploy HEAD:master
 ```
 
 ### Hint
