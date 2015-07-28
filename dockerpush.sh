@@ -23,6 +23,10 @@ while getopts "e:s:" o; do
 done
 shift $((OPTIND-1))
 
+if [ -n "$e" ] && [ ! -f "$e" ]; then
+	echo "Envfile $e not found"
+	exit 1
+fi
 
 #############################################################################################################
 # Start the Main part of this script
