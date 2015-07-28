@@ -105,7 +105,7 @@ function createHook {
             if [[ \$ref =~ .*/master$ ]];
             then
                 echo "master ref received.  Deploying master branch"
-                sudo $DOCKERPUSH_REPO/dockerpush-strategy.sh "$NAME"
+                sudo $DOCKERPUSH_DIR/dockerpush-strategy.sh "$NAME"
                 exit 0
             else
                 echo "Ref \$ref successfully received.  Doing nothing: only the master branch may be deployed on this Repo."
