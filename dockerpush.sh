@@ -205,12 +205,11 @@ function createDefaultStrategy {
         : \${DOCKERPUSH_WORKDIR:=/var/www/repos}
 
         NAME="\$1"
-        REPONAME=\$NAME.git
         WORKTREE="\$DOCKERPUSH_WORKDIR/\$NAME"
-        GITDIR=$SCRIPT_DIR/\$REPONAME
+        GITDIR=$SCRIPT_DIR/\$NAME.git
         DOCKERPUSH_REPO=$DOCKERPUSH_DIR/\$NAME
         LOGENVFILE=\$SCRIPT_DIR/\$NAME/envfile
-echo \$WORKTREE \$GITDIR
+
         #############################################################################################################
         # Check for a valid repo created with the dockerpush script
         #############################################################################################################
