@@ -184,7 +184,7 @@ function createDefaultStrategy {
         #############################################################################################################
         # Script must be executed as superuser
         #############################################################################################################
-        if ! [ $(id -u) = 0 ]; then
+        if ! [ \$(id -u) = 0 ]; then
            echo "This script must be called as root or with sudo"
            exit 1
         fi
