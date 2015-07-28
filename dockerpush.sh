@@ -256,7 +256,7 @@ echo \$WORKTREE \$GITDIR
              exit 1
         fi
 EOF
-    chmod 740 "$DOCKERPUSH_DIR"/dockerpush-strategy.sh
+    chmod 741 "$DOCKERPUSH_DIR"/dockerpush-strategy.sh
 }
 
 main $1 $2
