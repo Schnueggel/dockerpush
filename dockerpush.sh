@@ -177,9 +177,6 @@ function createRepo {
 # Create Strategy Script
 #############################################################################################################
 function createDefaultStrategy {
-    if [ -f "$DOCKERPUSH_DIR/dockerpush-strategy.sh" ]; then
-        return
-    fi
     cat <<-EOF > "$DOCKERPUSH_DIR/dockerpush-strategy.sh"
         #!/bin/bash
 		SCRIPT_PATH=\$(readlink -e -- "\${BASH_SOURCE[0]}" && echo x) && SCRIPT_PATH=\${SCRIPT_PATH%?x}
