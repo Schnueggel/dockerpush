@@ -1,6 +1,6 @@
 # Dockerpush
 
-Is a simple script to manage docker installs with git
+Is a simple script to manage docker installs with git and docker-compose on bare metal instances
 
 ## Prequesite
 
