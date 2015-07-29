@@ -76,7 +76,6 @@ function main () {
 	createEnvFile
 	createWorkTreeDir
 	createRepo
-	doInitialCommit
 	createHook
 	createDefaultStrategy
 }
