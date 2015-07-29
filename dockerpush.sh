@@ -76,6 +76,7 @@ function main () {
 	createEnvFile
 	createWorkTreeDir
 	createRepo
+	doInitialCommit
 	createHook
 	createDefaultStrategy
 }
@@ -177,6 +178,19 @@ function createRepo {
     git init --bare $REPONAME
     chown -R $USER:$USER $REPONAME
 }
+
+#############################################################################################################
+# Create a initial commit
+#############################################################################################################
+function doInitialCommit {
+    git --work-tree=$WORKTREE --git-dir=$GITDIR checkout -f -b master
+    echo "Dockerpush repository" > $WORKTREE/dockerpush.txt
+    git --work-tree=$WORKTREE --git-dir=$GITDIR add .
+    git --work-tree=$WORKTREE --git-dir=$GITDIR commit -m "Dockperpush init"
+    git --work-tree=$WORKTREE --git-dir=$GITDIR remote add origin $GITDIR
+    git --work-tree=$WORKTREE --git-dir=$GITDIR push --set-upstream origin master
+}
+
 #############################################################################################################
 # Create Strategy Script
 #############################################################################################################
